@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto } from './create-employee.dto';
 
@@ -11,8 +19,17 @@ export class EmployeeController {
     return await this.employeeService.createEmployee(createEmployeeDto);
   }
 
-  @Get()
-  async getAllEmployee(): Promise<any> {
-    return this.employeeService.getAllEmployee();
+  @Get(':id')
+  async getAllEmployee(@Param('id') id: string): Promise<any> {
+    if (!id) {
+      return await this.employeeService.getAllEmployee();
+    } else {
+      return await this.employeeService.findEmployee(id);
+    }
+  }
+
+  @Delete()
+  async deleteEmployee(@Query('id') id: string): Promise<any> {
+    return await this.employeeService.deleteEmployee(id);
   }
 }
